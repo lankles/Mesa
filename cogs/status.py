@@ -79,8 +79,6 @@ class Status(commands.Cog):
     # On ready event.
     @commands.Cog.listener()
     async def on_ready(self):
-        print('Status cog is now online.')
-        print('-----')
         self.client.loop.create_task(self.statusloop())
 
 # ----------------------------------------------------------------------------------------------------------------------

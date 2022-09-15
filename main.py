@@ -28,10 +28,7 @@ token = open('token.txt', 'r').read()
 # Ready
 @client.event
 async def on_ready():
-
-    print('-----')
-    print(f'Logged in as {client.user}.')
-    print('-----')
+    print(f'Logged in as {client.user}')
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -39,6 +36,7 @@ async def on_ready():
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
+        print(f'{filename} is now online.')
 
 client.run(token)
 
