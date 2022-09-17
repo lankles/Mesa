@@ -53,7 +53,7 @@ class Helpful(commands.Cog):
             return
         else:
             # Sends the avatar image.
-            await ctx.channel.send(member.avatar_url)
+            await ctx.channel.send(member.display_avatar)
 
     # Error
     @pfp.error
