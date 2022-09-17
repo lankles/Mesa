@@ -7,20 +7,23 @@
 # ██║░╚═╝░██║███████╗██████╔╝██║░░██║   ░░╚██╔╝░░███████╗
 # ╚═╝░░░░░╚═╝╚══════╝╚═════╝░╚═╝░░╚═╝   ░░░╚═╝░░░╚══════╝
 
-# Landon G - 2021/2022
+# lankles - 2021/2022
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 # Libraries
 import os
 import discord
+import asyncio
 
 # Sub-Libraries (not sure if thats what they're called)
 from discord.ext import commands
 from discord.ext.commands import Cog
 
 # Client / Token
-client = commands.Bot(command_prefix='>', help_command=None)
+intents = discord.Intents.all()
+client = commands.Bot(command_prefix='>', intents=intents, help_command=None)
+
 token = open('token.txt', 'r').read()
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -33,11 +36,16 @@ async def on_ready():
 # ----------------------------------------------------------------------------------------------------------------------
 
 # Loads the cogs.
-for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-        client.load_extension(f'cogs.{filename[:-3]}')
-        print(f'{filename} is now online.')
+async def load():
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py'):
+            await client.load_extension(f'cogs.{filename[:-3]}')
+            print(f'{filename} is now online.')
 
-client.run(token)
+async def start():
+    await load()
+    await client.start(token)
+
+asyncio.run(start())
 
 # ----------------------------------------------------------------------------------------------------------------------

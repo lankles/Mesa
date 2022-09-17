@@ -40,40 +40,6 @@ dharvideos = [
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-# David Screenshots
-davidpics = [
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679488419725332/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679513145147432/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679547748417556/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679581293412402/Screenshot_20210115-110521.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679611258306620/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679654136807424/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679684654694461/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679711963676672/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679762907430923/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679792623419392/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679820436766750/Screenshot_20210212-135955.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679873339129856/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679924002258954/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679951714287666/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814679986229346366/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814680025772064798/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814680051223494656/unknown_1.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814680100846960700/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814680188109455390/Screenshot_20201217-025637.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814680219511816222/Screenshot_20201217-022816.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814680291398385685/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814680318866620456/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814680423288143902/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814680457705685032/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814680539437072444/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814680609095417876/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814680816743350272/unknown.png',
-    'https://cdn.discordapp.com/attachments/523639860905377807/814681173136506890/unknown.png'
-]
-
-# ----------------------------------------------------------------------------------------------------------------------
-
 # Class
 class UnlistedCmds(commands.Cog):
 
@@ -109,27 +75,12 @@ class UnlistedCmds(commands.Cog):
             'https://tenor.com/view/4k-caught-gif-20353888'
         )
 
-    # Ciara Command
-    @commands.command()
-    async def ciara(self, ctx):
-        # Sends the funny hamster image.
-        await ctx.channel.send(
-            'https://cdn.discordapp.com/attachments/794437275026063400/815006144862486578/20210226_164817.png'
-        )
-
     # Dhar Command
     @commands.command(aliases=['dharmann', 'mann'])
     async def dhar(self, ctx):
         # Sends a random Dhar Mann video.
         dharvideo = random.choice(dharvideos)
         await ctx.channel.send(dharvideo)
-
-    # David Command
-    @commands.command()
-    async def david(self, ctx):
-        # Sends a random David screenshot.
-        davidpic = random.choice(davidpics)
-        await ctx.channel.send(davidpic)
 
     # Jone Command
     @commands.command(aliases=['ruka', 'bitsy', 'doxhy', 'cheeko'])
@@ -171,7 +122,7 @@ END OF RECORDING """
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-def setup(client):
-    client.add_cog(UnlistedCmds(client))
+async def setup(client):
+   await client.add_cog(UnlistedCmds(client))
 
 # ----------------------------------------------------------------------------------------------------------------------

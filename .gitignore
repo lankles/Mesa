@@ -1,3 +1,4 @@
 # Hides token
 /token.txt
 /cogs/__pycache__
+/dockerfile

@@ -11,7 +11,6 @@
 
 # Libraries
 import discord
-import random
 import math
 
 # Sub-Libraries
@@ -45,13 +44,13 @@ class Help(commands.Cog):
         aliases=['h', 'info', 'information']
     )
     async def help(self, ctx, cog='1'):
-
         # Creates the basic embed we'll be using.
         helpEmbed = discord.Embed(
             color=3447003
         )
-        helpEmbed.set_thumbnail(url=ctx.author.avatar_url)
-        helpEmbed.set_author(name='Commands', icon_url=self.client.user.avatar_url)
+
+        helpEmbed.set_thumbnail(url=ctx.author.display_avatar)
+        helpEmbed.set_author(name='Commands',icon_url=self.client.user.display_avatar)
 
         # Removes cogs without commands or cogs we dont want to display.
         cogs = [c for c in self.client.cogs.keys()]
@@ -100,7 +99,7 @@ class Help(commands.Cog):
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-def setup(client):
-    client.add_cog(Help(client))
+async def setup(client):
+    await client.add_cog(Help(client))
 
 # ----------------------------------------------------------------------------------------------------------------------
