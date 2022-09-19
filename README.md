@@ -1,5 +1,5 @@
 # Mesa
 
-Discord bot initially written in 2021 as a way to learn Python more effectively. One of my first complete programming projects. If you'd like, you can make a token.txt file with a Discord token to run the bot. There is a very simplistic feature set, but what's there may spark some interest.
+Discord bot initially written in 2021 as a way to learn Python more effectively. One of my first complete programming projects. There is a very simplistic feature set, but what's there may spark some interest and I'll continue to develop it further in the future.
 
 https://mesa.lankles.com/
