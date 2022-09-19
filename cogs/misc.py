@@ -12,39 +12,24 @@
 # Libraries
 import discord
 import random
+import asyncio
 
 # Sub-Libraries
 from discord.ext import commands
+from discord import app_commands
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-# Dhar Mann Videos
-dharvideos = [
-    'https://www.youtube.com/watch?v=5iKNl7db0Fk',
-    'https://www.youtube.com/watch?v=AJha5MSQKjk',
-    'https://www.youtube.com/watch?v=adE-sKzHbE4',
-    'https://www.youtube.com/watch?v=YBgUNVMXKQ8',
-    'https://www.youtube.com/watch?v=X2SAw68Yt_4',
-    'https://www.youtube.com/watch?v=hN9ZVy6pb2s',
-    'https://www.youtube.com/watch?v=OKgHrTItDNU',
-    'https://www.youtube.com/watch?v=gEFmwpWfdAI',
-    'https://www.youtube.com/watch?v=dBw0eTkQ5IU',
-    'https://www.youtube.com/watch?v=6BfFzCyDf0M',
-    'https://www.youtube.com/watch?v=bji0cdIl9YQ',
-    'https://www.youtube.com/watch?v=PsBgJc0eVDU',
-    'https://www.youtube.com/watch?v=_Ct1Oez-R7U',
-    'https://www.youtube.com/watch?v=-L1IekaejfU',
-    'https://www.youtube.com/watch?v=0SGnQklLCk0',
-    'https://www.youtube.com/watch?v=5mbStEESjdg'
-]
+# The guild in which the /message command is useable
+hostGuild = 818348640451035158
 
 # ----------------------------------------------------------------------------------------------------------------------
 
 # Class
-class UnlistedCmds(commands.Cog):
+class Misc(commands.Cog):
 
     # Setup
-    def __init__(self, client):
+    def __init__(self, client: commands.Bot) -> None:
         self.client = client
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -60,55 +45,52 @@ class UnlistedCmds(commands.Cog):
     # ------------------------------------------------------------------------------------------------------------------
 
     # Tavros Command
-    @commands.command()
-    async def tavros(self, ctx):
-        # Sends the "tavros" gif.
-        await ctx.channel.send(
-            'https://media.discordapp.net/attachments/570340985452625920/813862319997714472/image0.gif'
-        )
+    @commands.hybrid_command(
+        name = "tavros",
+        description = "Sends a Tavros gif."
+    )
+    async def tavros(self, ctx: commands.Context):
+        await ctx.reply('https://media.discordapp.net/attachments/570340985452625920/813862319997714472/image0.gif')
 
-    # Hentai Command
-    @commands.command()
-    async def hentai(self, ctx):
-        # Sends the "hentai" gif.
-        await ctx.channel.send(
-            'https://tenor.com/view/4k-caught-gif-20353888'
-        )
-
-    # Dhar Command
-    @commands.command(aliases=['dharmann', 'mann'])
-    async def dhar(self, ctx):
-        # Sends a random Dhar Mann video.
-        dharvideo = random.choice(dharvideos)
-        await ctx.channel.send(dharvideo)
-
-    # Jone Command
-    @commands.command(aliases=['ruka', 'bitsy', 'doxhy', 'cheeko'])
-    async def jone(self, ctx):
-        # Sends the Jone VAC ban image.
-        await ctx.channel.send('https://cdn.discordapp.com/attachments/720122216246673420/827432461554024508/unknown.png')
-
-    # Message Command
-    @commands.command()
-    async def message(self, ctx, guildid, channelid, *, msg):
-        if ctx.guild.id == 818348640451035158:
+    # Messager Command
+    @commands.hybrid_command(
+        name = "message",
+        description = "Allows the bot owner to send messages.",
+        aliases=['messager','send']
+    )
+    @app_commands.guilds(discord.Object(id=818348640451035158))
+    async def messager(self, ctx: commands.Context, guildid: str, channelid: str, message: str):
+        if ctx.guild.id == hostGuild:
             # Sends a message in the desired channel
             for guild in self.client.guilds:
                 if str(guild.id) == guildid:
                     for channel in guild.channels:
                         if str(channel.id) == channelid:
-                            await channel.send(msg)
+                            await channel.send(message)
+                            await ctx.reply(f'Message sent succesfully in **{guild.name}**.')
+                            return
+                        else:
+                            await ctx.reply(f'Channel does not exist or **{self.client.user.name}** does not have access to it.')
+                            return
+            await ctx.reply(f'**{self.client.user.name}** is not in this guild.')
+        else:
+            await ctx.reply('You do not have permission to use this command.')
 
 # ----------------------------------------------------------------------------------------------------------------------
 
     # Nownline Command
-    @commands.command(aliases=['nl', 'nown', 'incident'])
-    async def nownline(self, ctx):
+    @commands.hybrid_command(
+        name = "nownline",
+        description = "Recounts the Nownline incident.",
+        aliases=['nl','line','nown']
+    )
+    @app_commands.guilds(discord.Object(id=818348640451035158))
+    async def nownline(self, ctx: commands.Context):
         # Sends the nownline copypasta.
-        await ctx.channel.send(
-            """ [NOWNLINE INCCIDENT]
-Start of recording by Dr. ######
+        await ctx.reply(
+            """ **[NOWNLINE INCCIDENT]**
 
+Start of recording by Dr. ######
 
 It was 9:09 pm of November 1, 2018. The deep facilty known as ####### had caugth an explosin or some sort of light that went for hours. People of ######## believed that something has fallen from the sky by something or someone. It went from 2 hours that the bombing went down and a light emerged from the ground. The bombing was captured with camers surronded the facility and we can give info on what we saw that day. Cam 2 and 3 screen's was all white and cannot identify what was it, but in Cam 4, it showed a beam of ligth from the sky that landed down and created a large ligth outside from the facility. We never know where it came from, but researches theorized and officially called it the "Nownline" incident. Line as in as the Beam that represents a line and Nown as a explosion or ligth. There's surrounding this incident include 3 theories
 1. The beaming ligth came from aliens or other worldly spedcimen
@@ -117,12 +99,12 @@ It was 9:09 pm of November 1, 2018. The deep facilty known as ####### had caugth
 
 All this theories could be true but seems to be this will remain a mystery
 
-END OF RECORDING """
+*END OF RECORDING* """
         )
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-async def setup(client):
-   await client.add_cog(UnlistedCmds(client))
+async def setup(client: commands.Bot) -> None:
+   await client.add_cog(Misc(client))
 
 # ----------------------------------------------------------------------------------------------------------------------

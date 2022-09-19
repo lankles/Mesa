@@ -26,8 +26,6 @@ statuses = [
     'DOOM 3',
     'Counter-Strike: Global Offensive',
     'Counter-Strike: Condition Zero',
-    'Nekopara Vol. 1',
-    'Nekopara Vol. 4',
     'Minecraft',
     'Minecraft: Dungeons',
     'PlayerUnknowns Battlegrounds',
@@ -48,7 +46,7 @@ statuses = [
 class Status(commands.Cog):
 
     # Setup
-    def __init__(self, client):
+    def __init__(self, client: commands.Bot) -> None:
         self.client = client
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -83,7 +81,9 @@ class Status(commands.Cog):
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-async def setup(client):
-    await client.add_cog(Status(client))
-
+async def setup(client: commands.Bot) -> None:
+   await client.add_cog(
+    Status(client),
+    guilds = [discord.Object(id=818348640451035158)])
+    
 # ----------------------------------------------------------------------------------------------------------------------

@@ -15,6 +15,7 @@ import random
 
 # Sub-Libraries
 from discord.ext import commands
+from discord import app_commands
 
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -148,11 +149,33 @@ entry3 = [
 
 # ----------------------------------------------------------------------------------------------------------------------
 
+# Dhar Mann videos
+dharvideos = [
+    'https://www.youtube.com/watch?v=5iKNl7db0Fk',
+    'https://www.youtube.com/watch?v=AJha5MSQKjk',
+    'https://www.youtube.com/watch?v=adE-sKzHbE4',
+    'https://www.youtube.com/watch?v=YBgUNVMXKQ8',
+    'https://www.youtube.com/watch?v=X2SAw68Yt_4',
+    'https://www.youtube.com/watch?v=hN9ZVy6pb2s',
+    'https://www.youtube.com/watch?v=OKgHrTItDNU',
+    'https://www.youtube.com/watch?v=gEFmwpWfdAI',
+    'https://www.youtube.com/watch?v=dBw0eTkQ5IU',
+    'https://www.youtube.com/watch?v=6BfFzCyDf0M',
+    'https://www.youtube.com/watch?v=bji0cdIl9YQ',
+    'https://www.youtube.com/watch?v=PsBgJc0eVDU',
+    'https://www.youtube.com/watch?v=_Ct1Oez-R7U',
+    'https://www.youtube.com/watch?v=-L1IekaejfU',
+    'https://www.youtube.com/watch?v=0SGnQklLCk0',
+    'https://www.youtube.com/watch?v=5mbStEESjdg'
+]
+
+# ----------------------------------------------------------------------------------------------------------------------
+
 # Class
 class Randomizers(commands.Cog):
 
     # Setup
-    def __init__(self, client):
+    def __init__(self, client: commands.Bot) -> None:
         self.client = client
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -168,17 +191,17 @@ class Randomizers(commands.Cog):
     # ------------------------------------------------------------------------------------------------------------------
 
     # Gif Command
-    @commands.command(
+    @commands.hybrid_command(
         name='gif',
         description='Chooses a random gif to send.'
     )
     async def gif(self, ctx):
         # Picks a gif and sends it.
         newgif = random.choice(gifs)
-        await ctx.channel.send(newgif)
+        await ctx.reply(newgif)
 
     # Quote Command
-    @commands.command(
+    @commands.hybrid_command(
         name='quote',
         description='Chooses a random quote to send.',
         aliases=['quotes']
@@ -186,10 +209,10 @@ class Randomizers(commands.Cog):
     async def quote(self, ctx):
         # Picks a quote and sends it.
         newquote = random.choice(quotes)
-        await ctx.channel.send(f'"{newquote}"')
+        await ctx.reply(f'"{newquote}"')
 
     # Flip Command
-    @commands.command(
+    @commands.hybrid_command(
         name='flip',
         description='Gives a random heads or tails answer to simulate a coin flip.',
         aliases=['coin', 'toss']
@@ -198,35 +221,32 @@ class Randomizers(commands.Cog):
         # Picks the answer and sends it.
         randombit = random.getrandbits(1)
         if randombit == 1:
-            await ctx.channel.send('Heads!')
+            await ctx.reply('Heads!')
         else:
-            await ctx.channel.send('Tails!')
+            await ctx.reply('Tails!')
 
     # 8-Ball Command
-    @commands.command(
-        name='ball',
+    @commands.hybrid_command(
+        name='8ball',
         description='Gives a random Magic 8-Ball answer.',
-        aliases=['eight', 'eightball', '8ball']
+        aliases=['eight', 'eightball', 'ball']
     )
-    async def ball(self, ctx, *, question=None):
+    async def ball(self, ctx, question: str):
         # Picks the answer and sends it.
-        if question is None:
+        newresponse = random.choice(responses)
+        await ctx.reply(f'**Question**: {question}\n**Answer**: {newresponse}')
 
-            await ctx.channel.send('You must input a valid question. Try "**>ball [question]**".')
-            return
-
-        else:
-
-            newresponse = random.choice(responses)
-            await ctx.channel.send(newresponse)
-
-    # Error
-    @ball.error
-    async def ball_error(self, ctx, error):
-        return
+    # Dhar Command
+    @commands.hybrid_command(
+        name = "dhar",
+        description = "Sends a random Dhar Mann video."
+    )
+    async def dhar(self, ctx: commands.Context):
+        dharvideo = random.choice(dharvideos)
+        await ctx.reply(dharvideo)
 
     # Xbox Live Command
-    @commands.command(
+    @commands.hybrid_command(
         name='xbox',
         description='Generates a random Xbox Live username.',
         aliases=['xboxlive']
@@ -236,12 +256,12 @@ class Randomizers(commands.Cog):
         word1 = random.choice(entry1)
         word2 = random.choice(entry2)
         word3 = random.choice(entry3)
-        await ctx.channel.send(f'{word1}{word2}{word3}')
+        await ctx.reply(f'{word1}{word2}{word3}')
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-async def setup(client):
-    await client.add_cog(Randomizers(client))
+async def setup(client: commands.Bot) -> None:
+   await client.add_cog(Randomizers(client))
 
 # ----------------------------------------------------------------------------------------------------------------------

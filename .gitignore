@@ -1,4 +1,4 @@
-# Hides token
 /token.txt
+/appid.txt
 /cogs/__pycache__
 /dockerfile

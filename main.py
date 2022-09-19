@@ -1,11 +1,11 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
-# ███╗░░░███╗███████╗░██████╗░█████╗░   ██╗░░░██╗░░███╗░░
-# ████╗░████║██╔════╝██╔════╝██╔══██╗   ██║░░░██║░████║░░
-# ██╔████╔██║█████╗░░╚█████╗░███████║   ╚██╗░██╔╝██╔██║░░
-# ██║╚██╔╝██║██╔══╝░░░╚═══██╗██╔══██║   ░╚████╔╝░╚═╝██║░░
-# ██║░╚═╝░██║███████╗██████╔╝██║░░██║   ░░╚██╔╝░░███████╗
-# ╚═╝░░░░░╚═╝╚══════╝╚═════╝░╚═╝░░╚═╝   ░░░╚═╝░░░╚══════╝
+# ███╗░░░███╗███████╗░██████╗░█████╗░
+# ████╗░████║██╔════╝██╔════╝██╔══██╗
+# ██╔████╔██║█████╗░░╚█████╗░███████║
+# ██║╚██╔╝██║██╔══╝░░░╚═══██╗██╔══██║
+# ██║░╚═╝░██║███████╗██████╔╝██║░░██║
+# ╚═╝░░░░░╚═╝╚══════╝╚═════╝░╚═╝░░╚═╝
 
 # lankles - 2021/2022
 
@@ -14,38 +14,91 @@
 # Libraries
 import os
 import discord
-import asyncio
+import typing
 
 # Sub-Libraries (not sure if thats what they're called)
+from typing import *
 from discord.ext import commands
-from discord.ext.commands import Cog
+from discord.ext.commands import is_owner
 
-# Client / Token
+# Intents / Token / App ID
 intents = discord.Intents.all()
-client = commands.Bot(command_prefix='>', intents=intents, help_command=None)
-
 token = open('token.txt', 'r').read()
+appId = open('appid.txt', 'r').read()
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-# Ready
-@client.event
-async def on_ready():
-    print(f'Logged in as {client.user}')
+# Class
+class Mesa(commands.Bot):
+
+    def __init__(self):
+        super().__init__(
+            command_prefix = '>',
+            intents = intents,
+            help_command=None,
+            application_id = appId)
+
+    async def setup_hook(self):            
+        for filename in os.listdir('./cogs'):
+            if filename.endswith('.py'):
+                await self.load_extension(f'cogs.{filename[:-3]}')
+                print(f'{filename} is now online.')
+        
+    async def close(self):
+        await super().close()
+        # await self.session.close()
+
+    async def on_command_error(self, ctx, error):
+        await ctx.reply(error, ephemeral = True)
+
+    async def on_ready(self):
+        print(f'Logged in as {client.user}')
+
+client = Mesa()
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-# Loads the cogs.
-async def load():
-    for filename in os.listdir('./cogs'):
-        if filename.endswith('.py'):
-            await client.load_extension(f'cogs.{filename[:-3]}')
-            print(f'{filename} is now online.')
+@client.command()
+@commands.guild_only()
+@is_owner()
+async def sync(
+  ctx: commands.Context, guilds: commands.Greedy[discord.Object], spec: Optional[Literal["~", "*", "^"]] = None) -> None:
+    if not guilds:
+        if spec == "~":
+            synced = await ctx.bot.tree.sync(guild=ctx.guild)
+        elif spec == "*":
+            ctx.bot.tree.copy_global_to(guild=ctx.guild)
+            synced = await ctx.bot.tree.sync(guild=ctx.guild)
+        elif spec == "^":
+            ctx.bot.tree.clear_commands(guild=ctx.guild)
+            await ctx.bot.tree.sync(guild=ctx.guild)
+            synced = []
+        else:
+            synced = await ctx.bot.tree.sync()
 
-async def start():
-    await load()
-    await client.start(token)
+        await ctx.send(
+            f"Synced **{len(synced)}** commands {'globally.' if spec is None else 'to the current guild.'}"
+        )
+        return
 
-asyncio.run(start())
+    ret = 0
+    for guild in guilds:
+        try:
+            await ctx.bot.tree.sync(guild=guild)
+        except discord.HTTPException:
+            pass
+        else:
+            ret += 1
+
+    await ctx.send(f"Synced the tree to {ret}/{len(guilds)}.")
+
+# Works like:
+# >sync -> global sync
+# >sync ~ -> sync current guild
+# >sync * -> copies all global app commands to current guild and syncs
+# >sync ^ -> clears all commands from the current guild target and syncs (removes guild commands)
+# >sync id_1 id_2 -> syncs guilds with id 1 and 2
+
+client.run(token)
 
 # ----------------------------------------------------------------------------------------------------------------------
