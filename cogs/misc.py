@@ -47,7 +47,7 @@ class Misc(commands.Cog):
     # Tavros Command
     @commands.hybrid_command(
         name = "tavros",
-        description = "Sends a Tavros gif."
+        description = "Sends a Tavros gif (I was forced to add this against my will)."
     )
     async def tavros(self, ctx: commands.Context):
         await ctx.reply('https://media.discordapp.net/attachments/570340985452625920/813862319997714472/image0.gif')
