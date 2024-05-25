@@ -69,9 +69,6 @@ class Misc(commands.Cog):
                             await channel.send(message)
                             await ctx.reply(f'Message sent succesfully in **{guild.name}**.')
                             return
-                        else:
-                            await ctx.reply(f'Channel does not exist or **{self.client.user.name}** does not have access to it.')
-                            return
             await ctx.reply(f'**{self.client.user.name}** is not in this guild.')
         else:
             await ctx.reply('You do not have permission to use this command.')
